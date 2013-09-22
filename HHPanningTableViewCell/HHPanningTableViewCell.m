@@ -392,9 +392,16 @@ static HHPanningTableViewCellDirection HHOppositeDirection(HHPanningTableViewCel
 #pragma mark -
 #pragma mark Gesture recognizer
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)recognizer
 {
-	return YES;
+    if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]])
+    {
+        UIPanGestureRecognizer *panRecognizer = (UIPanGestureRecognizer *)recognizer;
+        CGPoint velocity = [panRecognizer velocityInView:self];
+        return ABS(velocity.x) > ABS(velocity.y); // Horizontal panning
+    }
+    else
+        return YES;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch
